@@ -1,0 +1,211 @@
+/* space.css */
+:root {
+    --primary-color: #FFFFFFE0;
+    --background-color: #0a0a2a;
+    --text-color: #ffffff;
+    --accent-color: #ff00ff;
+    --button-hover: #00cc00;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    font-family: 'Press Start 2P', cursive;
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+    padding: 2rem;
+    text-align: center;
+}
+
+/* Header Styles */
+header {
+    margin-bottom: 2rem;
+}
+
+.glitch {
+    font-size: 3rem;
+    position: relative;
+    text-shadow: 0.05em 0 0 var(--accent-color),
+                -0.025em -0.05em 0 #00cc00,
+                0.025em 0.05em 0 #00cc00;
+    animation: glitch 500ms infinite;
+}
+
+.glitch::before,
+.glitch::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.glitch::before {
+    animation: glitch 650ms infinite;
+    clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+    transform: translate(-0.025em, -0.0125em);
+    opacity: 0.75;
+}
+
+.glitch::after {
+    animation: glitch 375ms infinite;
+    clip-path: polygon(0 80%, 100% 20%, 100% 100%, 0 100%);
+    transform: translate(0.0125em, 0.025em);
+    opacity: 0.75;
+}
+
+@keyframes glitch {
+    0% {
+        text-shadow: 0.05em 0 0 var(--accent-color),
+                    -0.025em -0.05em 0 #00cc00,
+                    0.025em 0.05em 0 #00cc00;
+    }
+    14% {
+        text-shadow: 0.05em 0 0 var(--accent-color),
+                    -0.025em -0.05em 0 #00cc00,
+                    0.025em 0.05em 0 #00cc00;
+    }
+    15% {
+        text-shadow: -0.05em -0.025em 0 var(--accent-color),
+                    0.025em 0.025em 0 #00cc00,
+                    -0.05em -0.05em 0 #00cc00;
+    }
+    49% {
+        text-shadow: -0.05em -0.025em 0 var(--accent-color),
+                    0.025em 0.025em 0 #00cc00,
+                    -0.05em -0.05em 0 #00cc00;
+    }
+    50% {
+        text-shadow: 0.025em 0.05em 0 var(--accent-color),
+                    0.05em 0 0 #00cc00,
+                    0 -0.05em 0 #00cc00;
+    }
+    99% {
+        text-shadow: 0.025em 0.05em 0 var(--accent-color),
+                    0.05em 0 0 #00cc00,
+                    0 -0.05em 0 #00cc00;
+    }
+    100% {
+        text-shadow: -0.025em 0 0 var(--accent-color),
+                    -0.025em -0.025em 0 #00cc00,
+                    -0.025em -0.05em 0 #00cc00;
+    }
+}
+
+.subtitle {
+    font-size: 20px;
+    color: var(--primary-color);
+    margin-top: 1rem;
+}
+
+/* Message Styles */
+.message {
+    margin: 2rem 0;
+}
+
+.revenge {
+    color: var(--primary-color);
+    font-size: 18px;
+}
+
+/* Game Container Styles */
+.game-container {
+    margin: 2rem auto;
+    background: #0a0a2a;
+    /*border: 2px solid var(--primary-color);*/
+    border-radius: 10px;
+    padding: 1rem;
+    /*box-shadow: 0 0 20px rgba(0, 255, 0, 0.2);*/
+}
+
+#board {
+    display: block;
+    margin: 0 auto;
+}
+
+/* Controls Styles */
+.controls {
+    margin-top: 2rem;
+}
+
+.instructions {
+    font-size: 0.8rem;
+    margin-bottom: 1.5rem;
+}
+
+.key {
+    display: inline-block;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 2px solid var(--primary-color);
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    margin: 0 0.5rem;
+}
+
+.restart-btn, .homepage-btn {
+    background-color: var(--primary-color);
+    color: var(--background-color);
+    border: none;
+    padding: 1rem 2rem;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.restart-btn:hover, .homepage-btn:hover{
+    background-color: var(--button-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 255, 0, 0.3);
+}
+
+.btn-icon {
+    font-size: 1.2rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        padding: 1rem;
+    }
+
+    .glitch {
+        font-size: 2rem;
+    }
+
+    .alert {
+        font-size: 1rem;
+    }
+
+    .game-container {
+        margin: 1rem auto;
+    }
+
+    .key {
+        padding: 0.3rem 0.6rem;
+    }
+
+    .restart-btn {
+        padding: 0.8rem 1.5rem;
+        font-size: 0.8rem;
+    }
+}

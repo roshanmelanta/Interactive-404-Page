@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>404 - Space Invaders Attack!</title>
+        <link rel="stylesheet" href="styles.css">
+        <script src="space.js"></script>
+        <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    </head>
+
+    <body>
+        <div class="container">
+            <header>
+                <h1 class="glitch">ERROR 404</h1>
+                <h1 class="subtitle">The specified page does not exist</h1>
+            </header>
+
+            <div class="message">
+                <p class="revenge">This page was wiped out by Space Invaders! Get your revenge!</p>
+            </div>
+
+            <div class="game-container">
+                <canvas id="board"></canvas>
+            </div>
+
+            <div class="controls">
+                <p class="instructions">
+                    Use <span class="key">←</span> <span class="key">→</span> to move and <span class="key">Space</span> to shoot!
+                </p>
+                <button class="restart-btn" id="restart">
+                    <span class="btn-icon"></span> Restart Mission
+                </button>
+                <button class="homepage-btn" id="homepage">
+                    <span class="btn-icon"></span> Go to Homepage
+                </button>                
+            </div>
+        </div>
+    </body>
+</html>
