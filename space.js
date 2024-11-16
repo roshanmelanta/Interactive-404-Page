@@ -41,6 +41,10 @@ let bulletVelocityY = -10;
 let score = 0;
 let gameOver = false;
 
+// Add visual effects and gameplay enhancements
+let particles = [];
+let stars = [];
+
 // Define the 404 pattern
 const pattern404 = [
     "  ███     ████      ███  ", // First row
@@ -66,13 +70,13 @@ window.onload = function() {
     });
 
     shipImg = new Image();
-    shipImg.src = "./ship.png";
+    shipImg.src = "./images/ship.png";
     shipImg.onload = function() {
         context.drawImage(shipImg, ship.x, ship.y, ship.width, ship.height);
     }
 
     alienImg = new Image();
-    alienImg.src = "./alien.png";
+    alienImg.src = "./images/alien.png";
     createAliens();
 
     requestAnimationFrame(update);
@@ -80,8 +84,72 @@ window.onload = function() {
     document.addEventListener("keyup", shoot);
 }
 
+// Initialize stars
+function createStars() {
+    for (let i = 0; i < 50; i++) {
+        stars.push({
+            x: Math.random() * boardWidth,
+            y: Math.random() * boardHeight,
+            size: Math.random() * 2,
+            speed: Math.random() * 2 + 1
+        });
+    }
+}
+
+// Update and draw stars
+function updateStars() {
+    context.fillStyle = "white";
+    stars.forEach(star => {
+        star.y += star.speed;
+        if (star.y > boardHeight) {
+            star.y = 0;
+            star.x = Math.random() * boardWidth;
+        }
+        context.beginPath();
+        context.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+        context.fill();
+    });
+}
+
+// Particle effect for explosions
+class Particle {
+    constructor(x, y) {
+        this.x = x;
+        this.y = y;
+        this.size = Math.random() * 3 + 1;
+        this.speedX = Math.random() * 6 - 3;
+        this.speedY = Math.random() * 6 - 3;
+        this.life = 1;
+        this.color = `hsl(${Math.random() * 60 + 120}, 100%, 50%)`;
+    }
+
+    update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        this.life -= 0.02;
+    }
+
+    draw() {
+        context.fillStyle = this.color;
+        context.globalAlpha = this.life;
+        context.fillRect(this.x, this.y, this.size, this.size);
+        context.globalAlpha = 1;
+    }
+}
+
+// Modified alien explosion
+function createExplosion(x, y) {
+    for (let i = 0; i < 20; i++) {
+        particles.push(new Particle(x, y));
+    }
+}
+
 function update() {
     requestAnimationFrame(update);
+    context.clearRect(0, 0, board.width, board.height);
+
+    // Draw starfield
+    updateStars();
 
     if (gameOver) {
         context.clearRect(0, 0, board.width, board.height);
@@ -111,12 +179,12 @@ function update() {
         return; // Stop further updates
     }
 
-    context.clearRect(0, 0, board.width, board.height);
-
-    // Draw ship
+    // Draw ship with glow effect
+    context.save();
     context.drawImage(shipImg, ship.x, ship.y, ship.width, ship.height);
+    context.restore();
 
-    // Update and draw aliens
+    // Update and draw aliens with glow
     for (let i = 0; i < alienArray.length; i++) {
         let alien = alienArray[i];
         if (alien.alive) {
@@ -131,7 +199,9 @@ function update() {
                 }
             }
 
+            context.save();
             context.drawImage(alien.img, alien.x, alien.y, alien.width, alien.height);
+            context.restore();
 
             if (alien.y >= ship.y) {
                 gameOver = true;
@@ -139,13 +209,26 @@ function update() {
         }
     }
 
-    // Update and draw bullets
+    // Update and draw bullets with trail effect
     for (let i = 0; i < bulletArray.length; i++) {
         let bullet = bulletArray[i];
         bullet.y += bulletVelocityY;
-        context.fillStyle = "white";
+        
+        // Draw bullet trail
+        context.save();
+        context.beginPath();
+        context.strokeStyle = "#00ff00";
+        context.lineWidth = 2;
+        context.moveTo(bullet.x + bullet.width/2, bullet.y);
+        context.lineTo(bullet.x + bullet.width/2, bullet.y + 10);
+        context.stroke();
+        context.restore();
+
+        // Draw bullet
+        context.fillStyle = "#fff";
         context.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
 
+        // Check collisions
         for (let j = 0; j < alienArray.length; j++) {
             let alien = alienArray[j];
             if (!bullet.used && alien.alive && detectCollision(bullet, alien)) {
@@ -153,24 +236,29 @@ function update() {
                 alien.alive = false;
                 alienCount--;
                 score += 100;
+                createExplosion(alien.x + alien.width/2, alien.y + alien.height/2);
             }
         }
     }
 
-    // Clear used or out-of-bounds bullets
-    while (bulletArray.length > 0 && (bulletArray[0].used || bulletArray[0].y < 0)) {
-        bulletArray.shift();
-    }
+    // Update particles
+    particles.forEach((particle, index) => {
+        particle.update();
+        particle.draw();
+        if (particle.life <= 0) {
+            particles.splice(index, 1);
+        }
+    });
+
+    // Draw score with glow effect
+    context.fillStyle = "#00ff00";
+    context.font = "20px 'Press Start 2P'";
+    context.fillText(`Score: ${score}`, 10, 30);
 
     // Check win condition
     if (alienCount === 0) {
         gameOver = true;
     }
-
-    // Display score
-    context.fillStyle = "white";
-    context.font = "16px courier";
-    context.fillText(score, 5, 20);
 }
 
 
