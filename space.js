@@ -9,16 +9,16 @@ let boardHeight = tileSize * rows;
 let context;
 
 //ship
-let shipWidth = tileSize*2;
-let shipHeight = tileSize;
-let shipX = tileSize * columns/2 - tileSize;
-let shipY = tileSize * rows - tileSize*2;
+let shipWidth = tileSize * 4;
+let shipHeight = tileSize * 2;
+let shipX = tileSize * columns / 2 - tileSize;
+let shipY = tileSize * rows - tileSize * 2;
 
 let ship = {
-    x : shipX,
-    y : shipY,
-    width : shipWidth,
-    height : shipHeight
+    x: shipX,
+    y: shipY,
+    width: shipWidth,
+    height: shipHeight
 }
 
 let shipImg;
@@ -26,7 +26,7 @@ let shipVelocityX = tileSize;
 
 //aliens
 let alienArray = [];
-let alienWidth = tileSize*2;
+let alienWidth = tileSize * 2;
 let alienHeight = tileSize;
 let alienX = tileSize * 4;  // Starting position adjusted
 let alienY = tileSize * 2;  // Starting position adjusted
@@ -40,6 +40,7 @@ let bulletVelocityY = -10;
 
 let score = 0;
 let gameOver = false;
+
 
 // Add visual effects and gameplay enhancements
 let particles = [];
@@ -57,7 +58,7 @@ const pattern404 = [
     "    █     ████        █  "
 ];
 
-window.onload = function() {
+window.onload = function () {
     board = document.getElementById("board");
     board.width = boardWidth;
     board.height = boardHeight;
@@ -65,13 +66,13 @@ window.onload = function() {
 
     // Get the restart button and add event listener
     const restartButton = document.getElementById("restart");
-    restartButton.addEventListener("click", function() {
+    restartButton.addEventListener("click", function () {
         window.location.reload();  // Reload the page to restart the game
     });
 
     shipImg = new Image();
     shipImg.src = "./images/ship.png";
-    shipImg.onload = function() {
+    shipImg.onload = function () {
         context.drawImage(shipImg, ship.x, ship.y, ship.width, ship.height);
     }
 
@@ -213,14 +214,14 @@ function update() {
     for (let i = 0; i < bulletArray.length; i++) {
         let bullet = bulletArray[i];
         bullet.y += bulletVelocityY;
-        
+
         // Draw bullet trail
         context.save();
         context.beginPath();
         context.strokeStyle = "#00ff00";
         context.lineWidth = 2;
-        context.moveTo(bullet.x + bullet.width/2, bullet.y);
-        context.lineTo(bullet.x + bullet.width/2, bullet.y + 10);
+        context.moveTo(bullet.x + bullet.width / 2, bullet.y);
+        context.lineTo(bullet.x + bullet.width / 2, bullet.y + 10);
         context.stroke();
         context.restore();
 
@@ -236,7 +237,7 @@ function update() {
                 alien.alive = false;
                 alienCount--;
                 score += 100;
-                createExplosion(alien.x + alien.width/2, alien.y + alien.height/2);
+                createExplosion(alien.x + alien.width / 2, alien.y + alien.height / 2);
             }
         }
     }
@@ -252,7 +253,7 @@ function update() {
 
     // Draw score with glow effect
     context.fillStyle = "#00ff00";
-    context.font = "20px 'Press Start 2P'";
+    context.font = "18px 'Press Start 2P'";
     context.fillText(`Score: ${score}`, 10, 30);
 
     // Check win condition
@@ -282,10 +283,10 @@ function createAliens() {
             if (pattern404[row][col] === '█') {
                 let alien = {
                     img: alienImg,
-                    x: alienX + col * (alienWidth/2),
-                    y: alienY + row * (alienHeight/2),
-                    width: alienWidth/2,
-                    height: alienHeight/2,
+                    x: alienX + col * (alienWidth / 2),
+                    y: alienY + row * (alienHeight / 2),
+                    width: alienWidth / 2,
+                    height: alienHeight / 2,
                     alive: true
                 }
                 alienArray.push(alien);
@@ -302,11 +303,11 @@ function shoot(e) {
 
     if (e.code == "Space") {
         let bullet = {
-            x : ship.x + shipWidth*15/32,
-            y : ship.y,
-            width : tileSize/8,
-            height : tileSize/2,
-            used : false
+            x: ship.x + shipWidth * 15 / 32,
+            y: ship.y,
+            width: tileSize / 8,
+            height: tileSize / 2,
+            used: false
         }
         bulletArray.push(bullet);
     }
@@ -314,7 +315,7 @@ function shoot(e) {
 
 function detectCollision(a, b) {
     return a.x < b.x + b.width &&
-           a.x + a.width > b.x &&
-           a.y < b.y + b.height &&
-           a.y + a.height > b.y;
+        a.x + a.width > b.x &&
+        a.y < b.y + b.height &&
+        a.y + a.height > b.y;
 }
