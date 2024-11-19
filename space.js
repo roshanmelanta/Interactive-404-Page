@@ -71,13 +71,13 @@ window.onload = function () {
     });
 
     shipImg = new Image();
-    shipImg.src = "./ship.png";
+    shipImg.src = "ship.png";
     shipImg.onload = function () {
         context.drawImage(shipImg, ship.x, ship.y, ship.width, ship.height);
     }
 
     alienImg = new Image();
-    alienImg.src = "./alien.png";
+    alienImg.src = "alien.png";
     createAliens();
 
     requestAnimationFrame(update);
